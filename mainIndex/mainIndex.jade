@@ -1,0 +1,35 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1")
+        meta(http-equiv="X-UA-COMPATIBLE" content="Edge")
+        title
+    body(ng-controller="mainIndexController")
+        .yzb-mainIndex-body
+            .yzb-mainIndex-header
+                .yzb-mainIndex-header-top
+                .yzb-mainIndex-header-middle
+                    .yzb-mainIndex-header-middle-title
+                        p Home Page
+                        label In Here , Follow your choose
+                    .yzb-mainIndex-header-middle-introduce
+                        p There is Roman , you can Deliberately to wander
+                        label Find your way , and
+                            span Go On !
+                .yzb-mainIndex-header-bottom
+                    .yzb-mainIndex-headerBottom-appScannning(ng-click="AppScanning()")
+                        p S
+                        label Scanning
+                    .yzb-mainIndex-headerBottom-localVideo(ng-click="localVideo()")
+                        p V
+                        label LocalVideo
+                    .yzb-mainIndex-headerBottom-recommendSeries(ng-click="RecommendSeries()")
+                        p R
+                        label Recommend
+                    .yzb-mainIndex-headerBottom-superTag(ng-click="superTag()")
+                        p T
+                        label superTag
+                    .yzb-mainIndex-headerBottom-mainCrm(ng-click="mainCrm()")
+                        p C
+                        label mainCrm

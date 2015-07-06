@@ -1,0 +1,51 @@
+doctype html
+html(id="ng-app",ng-app="recommendSeriesApp",lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1")
+        meta(http-equiv="X-UA-COMPATIBLE" content="Edge")
+        //base(href="/")
+        title 推荐剧集
+    body(ng-controller="recommendSeriesController")
+        .yzb-recommend-body
+            .container-fluid
+                .navbar.navbar-fixed-top.yzb-recommend-Submit#recommendAddSumbit(style="display:none;")
+                    button.btn.btn-primary.col-md-offset-1(type="button",ng-click="submitAllSeriesId()") 提交所有更改
+                script#SeriesModal(type="text/ng-template")
+                    .modal-content
+                        .modal-header
+                            button.close(type="button",ng-click="close()") &times;
+                            h4.modal-title.col-md-offset-4.yzb-tagmodal-title Update Recommend
+                        .modal-body
+                            form.form-horizontal(role="form",ng-submit="updateRecommend(updateId)")
+                                .form-group
+                                    label.control-label.col-md-4.col-sm-4.col-xs-4 SeriesId:
+                                    textarea(required,style="width:50%;",ng-model="updateId")
+                                button.btn.btn-primary.right(type="submit",style="margin-left:35%;margin-right:8%;") Update
+                                button.btn.btn-warning(type="reset",style="margin-right:8%;") Reset
+                                button.btn.btn-default(type="button",ng-click="close()") Close
+                .container-fluid
+                    .col-md-12.yzb-recommend-header(ng-model="scrolTop") 推荐剧集
+                    .list-group(style="width:80%;margin:0 auto;")
+                        .list-group-item.col-md-12(ng-repeat="serie in series",style="margin-top:1%;border-radius:10px;")
+                            .media
+                                .media-left
+                                    a(href="#")
+                                        img(src="{{serie.group.picUrl}}")
+                                .media-body
+                                    .media-heading
+                                        h3.yzb-font-center(style="color:#ec971f;font-weight:bold;") {{serie.title}}
+                                    h4 描述:
+                                    div {{serie.group.desc}}
+                                    button.btn.btn-default.pull-right(type="button",style="width:10%;height:100%;",data-toggle="modal",data-target="#seriesModal",ng-click="getSeries(serie,$index)") 修改
+                .navbar.navbar-fixed-top.navbar-default.yzb-cebian-right
+                    ul.nav.navbar-nav.yzb-cebian-right-ul
+                        li
+                            button.btn.btn-default(type="button",ng-click="AppScanning()",style="margin-right:1%;margin-bottom:2%") AppScanning
+                        li
+                            button.btn.btn-warning(type="button",ng-click="localVideo()",style="margin-right:1%;margin-bottom:2%") localVideo
+                        li
+                            button.btn.btn-danger(type="button",ng-click="RecommendSeries()",style="margin-right:1%;margin-bottom:2%") Recommend
+                        li
+                            button.btn.btn-primary(type="button",ng-click="superTag()",style="margin-right:1%;margin-bottom:2%") SuperTag
+        load-Recommend-Series-Script

@@ -1,0 +1,109 @@
+doctype html
+html(lang="en",id="ng-app",ng-app="crmApp")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1")
+        meta(http-equiv="X-UA-COMPATIBLE" content="Edge")
+        title update Home page Message
+    body(ng-controller="mainCrmController")
+        .yzb-mainCrm-header
+            .yzb-mainCrmHeader-title
+                p Oh!
+                label Let go of worry,hard to change.
+            .yzb-mainCrmHeader-img
+                img(src="img/mainCrm-header-img.png")
+            .yzb-header-links You can change Videos and Users of the mainCrm
+                //button.btn.btn-default(ng-click="tabs[0].active=true") Videos
+                //button.btn.btn-default(ng-click="tabs[1].active=true") Users
+        .yzb-mainCrm-middle
+        .yzb-mainCrm-body
+            .yzb-mainCrm-body-top
+                .yzb-mainCrm-body-top-mainVideos(ng-repeat="i in [1,2,3]")
+                    .yzb-mainCrm-bodyTop-Video(id="mainCrmVideosPad{{$index}}",ng-mouseover="mbtmTopOver($index)",ng-mouseleave="mbtmTopLeave($index)")
+                        .yzb-mbtm-video-top(id="mbtmTop{{$index}}")
+                            button.btn(ng-click="mbtmUpdate($index)") update
+                        .yzb-mbtm-video-sWindow(id="mainCrmVideosSwindows{{$index}}",style="display:none;")
+                            form.form-horizontal.yzb-mbtm-videoForm#crmMainVideosForm(name="crmMainVideosForm",novalidate,ng-submit="updateCrmVideo(crmMainVideoData)")
+                                .yzb-mbtm-videoForm-top
+                                    button.btn.btn-default(type="submit",ng-disabled="crmMainVideosForm.$invalid") Update
+                                    button.btn.btn-default(ng-click="crmMainVideosCancel($index)") Cancel
+                                .yzb-mbtm-mainVideoForm
+                                    .form-group
+                                        label.control-label.yzb-mbtmForm-label vid:
+                                        textarea.form-control.yzb-mbtmForm-textarea(name="updateCrmMainVid",required,ng-pattern="/^[a-zA-Z0-9]{24}$/",ng-model="crmMainVideoData.v",placeholder="请输入crmVid")
+                                        .error.yzb-error-message(ng-show="crmMainVideosForm.updateCrmMainVid.$dirty&&crmMainVideosForm.updateCrmMainVid.$invalid")
+                                            small.error(ng-show="crmMainVideosForm.updateCrmMainVid.$error.required") Vid Can`t Required
+                                            small.error(ng-show="crmMainVideosForm.updateCrmMainVid.$error.pattern") Vid Don`t conform to the specifications
+                                    .form-group
+                                        label.control-label.yzb-mbtmForm-label title:
+                                        textarea.form-control.yzb-mbtmForm-textarea(name="updateCrmMainTitle",required,ng-model="crmMainVideoData.title",placeholder="请输入视频title")
+                                        .error.yzb-error-message(ng-show="crmMainVideosForm.updateCrmMainTitle.$dirty&&crmMainVideosForm.updateCrmMainTitle.$invalid")
+                                            small.error(ng-show="crmMainVideosForm.updateCrmMainTitle.$error.required") Title Can`t Required
+                                    .form-group
+                                        label.control-label.yzb-mbtmForm-label url:
+                                        textarea.form-control.yzb-mbtmForm-textarea(type="url",name="updateCrmMainUrl",required,ng-model="crmMainVideoData.url",placeholder="请输入视频链接")
+                                        .error.yzb-error-message(ng-show="crmMainVideosForm.updateCrmMainUrl.$dirty&&crmMainVideosForm.updateCrmMainUrl.$invalid")
+                                            small.error(ng-show="crmMainVideosForm.updateCrmMainUrl.$error.required") Url Can`t Required
+                                            small.error(ng-show="crmMainVideosForm.updateCrmMainUrl.$error.url") Url is not a Valid Url
+                                    .form-group
+                                        label.control-label.yzb-mbtmForm-label cover:
+                                        textarea.form-control.yzb-mbtmForm-textarea(type="url",name="crmVideoMainCover",required,ng-model="crmMainVideoData.cover",placeholder="请输入cover链接")
+                                        .error.yzb-error-message(ng-show="crmMainVideosForm.crmVideoMainCover.$dirty&&crmMainVideosForm.crmVideoMainCover.$invalid")
+                                            small.error(ng-show="crmMainVideosForm.crmVideoMainCover.$error.required") Cover Can`t Required
+                                            small.error(ng-show="crmMainVideosForm.crmVideoMainCover.$error.url") Cover is not a Valid Url
+                                //.yzb-mbtm-video-sWindow-left
+                                //.yzb-mbtm-video-sWindow-right
+
+            .yzb-mainCrm-body-bottom
+                .yzb-mainCrm-body-bottom-left
+                        .yzb-mainCrm-body-bottom-son(ng-repeat="i in [1,2,3,4,5]")
+                            .yzb-main-body-bottom-left-pad(id="crmVideosPad{{$index}}")
+                                .yzb-mainCrm-body-videos
+                                    p This is title{{$index}}
+                                    .yzb-mainCrm-body-videos-cover
+                                        img()
+                                    label This is describe This is describe
+                                .yzb-mainCrm-body-updateButton
+                                    button.btn.btn-default(ng-click="crmVideoButton($index)") update
+                            .yzb-mainCrm-body-sWindow(id="crmSwindows{{$index}}")
+                                .yzb-mbs-top
+                                form.form-horizontal.yzb-mbs-videoForm#crmVideosForm(role="form",name="crmVideosForm",novalidate,ng-submit="updateCrmVideo(crmVideoData)")
+                                    .yzb-mbs-videoForm-left {{$index+4}}
+                                    .yzb-mbs-videoForm-middle
+                                        .form-group
+                                            label.control-label.yzb-mbsForm-label vid:
+                                            textarea.form-control.yzb-mbsForm-textarea(name="updateCrmVid",required,ng-pattern="/^[a-zA-Z0-9]{24}$/",ng-model="crmVideoData.v",placeholder="请输入crmVid")
+                                            .error.yzb-error-message(ng-show="crmVideosForm.updateCrmVid.$dirty&&crmVideosForm.updateCrmVid.$invalid")
+                                                small.error(ng-show="crmVideosForm.updateCrmVid.$error.required") Vid Can`t Required
+                                                small.error(ng-show="crmVideosForm.updateCrmVid.$error.pattern") Vid Don`t conform to the specifications
+                                        .form-group
+                                            label.control-label.yzb-mbsForm-label title:
+                                            textarea.form-control.yzb-mbsForm-textarea(name="updateCrmTitle",required,ng-model="crmVideoData.title",placeholder="请输入视频title")
+                                            .error.yzb-error-message(ng-show="crmVideosForm.updateCrmTitle.$dirty&&crmVideosForm.updateCrmTitle.$invalid")
+                                                small.error(ng-show="crmVideosForm.updateCrmTitle.$error.required") Title Can`t Required
+                                        .form-group
+                                            label.control-label.yzb-mbsForm-label url:
+                                            textarea.form-control.yzb-mbsForm-textarea(type="url",name="updateCrmUrl",required,ng-model="crmVideoData.url",placeholder="请输入视频链接")
+                                            .error.yzb-error-message(ng-show="crmVideosForm.updateCrmUrl.$dirty&&crmVideosForm.updateCrmUrl.$invalid")
+                                                small.error(ng-show="crmVideosForm.updateCrmUrl.$error.required") Url Can`t Required
+                                                small.error(ng-show="crmVideosForm.updateCrmUrl.$error.url") Url is not a Valid Url
+                                        .form-group
+                                            label.control-label.yzb-mbsForm-label cover:
+                                            textarea.form-control.yzb-mbsForm-textarea(type="url",name="crmVideoCover",required,ng-model="crmVideoData.cover",placeholder="请输入cover链接")
+                                            .error.yzb-error-message(ng-show="crmVideosForm.crmVideoCover.$dirty&&crmVideosForm.crmVideoCover.$invalid")
+                                                small.error(ng-show="crmVideosForm.crmVideoCover.$error.required") Cover Can`t Required
+                                                small.error(ng-show="crmVideosForm.crmVideoCover.$error.url") Cover is not a Valid Url
+                                    .yzb-mbs-form-right
+                                        button.btn.btn-default(type="submit",ng-disabled="crmVideosForm.$invalid") Update
+                                        button.btn.btn-default(ng-click="crmVideosCancel($index)") Cancel
+                                .yzb-mbs-footer
+                .yzb-mainCrm-body-bottom-middle
+                .yzb-mainCrm-body-bottom-right
+                    .yzb-mainCrm-body-users
+            //tabset(justified="true")
+            //    tab(heading="{{tabs[0].title}}")
+            //        .yzb-mainCrm-body-content Videos
+            //
+            //    tab(heading="{{tabs[1].title}}")
+            //        .yzb-mainCrm-body-content Users
+        //.yzb-mainCrm-users

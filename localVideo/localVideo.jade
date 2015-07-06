@@ -1,0 +1,145 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1")
+        meta(http-equiv="X-UA-COMPATIBLE" content="Edge")
+        //base(href="/")
+        title 修改local视频
+        //link(rel="styleSheet",href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css")
+        //link(rel="styleSheet",href="css/localVideo.css")
+        //link(rel="styleSheet",href="css/pickdate/default.css")
+        //link(rel="styleSheet",href="css/pickdate/default.date.css")
+        //script(src="js/jquery.min.js")
+        //script(src="js/bootstrap.min.js")
+        //script(src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.min.js")
+        //script(src="js/angular-sanitize.min.js")
+        //script(src="js/localVideoApp.js")
+        //script(src="js/localVideoController.js")
+        //script(src="js/localVideoFilter.js")
+        //script(src="js/localVideoServices.js")
+        //script(src="js/directive.js")
+        //script(src="js/jquery.validator.min.js")
+        //script(src="js/pickdate/picker.js")
+        //script(src="js/pickdate/picker.date.js")
+        //script(src="js/pickdate/legacy.js")
+    body(ng-controller="localVideoController")
+        .container
+            script#addVideoModal(type="text/ng-template")
+                .modal-content
+                    .modal-header
+                        button.close(type="button",ng-click="close()") &times;
+                        h3.yzb-addVideoTitle-style AddLocalVideo
+                    .modal-body
+                        form.form-horizontal#addVideoForm(role="form",name="addVideoForm",novalidate,ng-submit="addLocalVideo(addVideoData)")
+                            .form-group
+                                label.control-label.col-md-4.col-sm-4.col-xs-4 url:
+                                textarea.form-control(type="url",name="addVideoUrl",required,style="width:50%;",ng-model="addVideoData.url",placeholder="请输入视频链接")
+                                .error.yzb-error-message(ng-show="addVideoForm.addVideoUrl.$dirty&&addVideoForm.addVideoUrl.$invalid")
+                                    small.error(ng-show="addVideoForm.addVideoUrl.$error.required") Url Can`t Required
+                                    small.error(ng-show="addVideoForm.addVideoUrl.$error.url") Url is not a Valid Url
+                            .form-group
+                                label.control-label.col-md-4.col-sm-4.col-xs-4 title:
+                                textarea.form-control(name="addVideoTitle",required,style="width:50%;",ng-model="addVideoData.title",placeholder="请输入视频title")
+                                .error.yzb-error-message(ng-show="addVideoForm.addVideoTitle.$dirty&&addVideoForm.addVideoUrl.$invalid")
+                                    small.error(ng-show="addVideoForm.addVideoTitle.$error.required") Title Can`t Required
+                            .form-group
+                                label.control-label.col-md-4.col-sm-4.col-xs-4 cover:
+                                textarea.form-control(type="url",name="addVideoCover",required,style="width:50%;",ng-model="addVideoData.cover",placeholder="请输入cover链接")
+                                .error.yzb-error-message(ng-show="addVideoForm.addVideoCover.$dirty&&addVideoForm.addVideoUrl.$invalid")
+                                    small.error(ng-show="addVideoForm.addVideoCover.$error.required") Cover Can`t Required
+                                    small.error(ng-show="addVideoForm.addVideoCover.$error.url") Cover is not a Valid Url
+                            .form-group
+                                button.btn.btn-warning(type="submit",ng-disabled="addVideoForm.$invalid",style="margin-left:20%;margin-right:5%;") Add
+                                select.btn-default.btn(ng-model="addVideoData.seriesId",style="width:30%;")
+                                    option(ng-repeat="q in sQuery",value="{{q._id}}",ng-if="q._id==activeQuery",selected="selected") {{q.name}}
+                                    option(ng-repeat="q in sQuery",value="{{q._id}}",ng-show="q._id!=activeQuery") {{q.name}}
+                                button.btn.btn-danger.pull-right(type="button",ng-click="close()",style="margin-right:5%;") Close
+            script#playVideoModal(type="text/ng-template")
+                .modal-content
+                    .modal-header
+                        button.close(type="button",ng-click="close()") &times;
+                        .yzb-sortvideotitle-font {{modalVideos.title}}
+                        .yzb-sortvideotitle-font(ng-show="modalVideos.title==''") 这人好懒，连个标题都没有~~~
+                    .modal-body
+                        form.form-horizontal#updateLocalForm(role="form",ng-submit="updateLmodalVideo(modalVideos)")
+                            video(controls,autoplay="true",ng-src="{{playVideo2()}}",style="width:100%")
+                            button.btn.btn-warning(type="submit") Update
+                            select.btn-default.btn(ng-model="modalseleclQuery",style="width:50%;",ng-change="modalsQuery(modalseleclQuery)")
+                                option(ng-repeat="q in sQueryList",value="{{q._id}}",ng-if="q._id==modalseleclQuery",selected="selected") {{q.name}}
+                                option(ng-repeat="q in sQueryList",value="{{q._id}}",ng-show="q._id!=modalseleclQuery") {{q.name}}
+                            button.btn.btn-danger.pull-right(type="button",ng-click="close()") Close
+    .container-fluid
+        .navbar.navbar-fixed-top.navbar-default.yzb-navbar-bcg
+            ul.nav.navbar-nav(style="margin-left:8%;")
+                li.yzb-selectVideo-Series(ng-repeat="queryserie in querySeries",ng-class="{true:'yzb-videoSelect',false:''}[queryserie._id==selectQuery]")
+                    a.yzb-nav-color(href="javascript:void(0)",ng-click="SelectQuerySeries(queryserie._id)",ng-class="{true:'yzb-color',false:''}[queryserie._id==selectQuery]") {{queryserie.name}}
+        .navbar.navbar-fixed-top.navbar-default.yzb-cebian-right
+            ul.nav.navbar-nav.yzb-cebian-right-ul
+                li
+                    button.btn.btn-default(type="button",ng-click="AppScanning()",style="margin-right:1%;margin-bottom:2%") AppScanning
+                li
+                    button.btn.btn-warning(type="button",ng-click="localVideo()",style="margin-right:1%;margin-bottom:2%") localVideo
+                li
+                    button.btn.btn-danger(type="button",ng-click="RecommendSeries()",style="margin-right:1%;margin-bottom:2%") Recommend
+                li
+                    button.btn.btn-primary(type="button",ng-click="superTag()",style="margin-right:1%;margin-bottom:2%") SuperTag
+        .navbar.navbar-fixed-top.navbar-default.yzb-cebian-left
+            button.btn.btn-warning.pull-right(type="button",ng-click="addVideo()",style="margin-right:1%;margin-bottom:2%") addVideo
+        .container(style="margin-top:70px;")
+            page-Directive
+                .row
+                    .thumbnail.yzb-row-style.col-lg-3.col-md-4.col-sm-6.col-xs-12(ng-repeat="sortVideo in sortVideos track by $index",style="margin-left:5%;")
+                        a(href="javascript:void(0)",ng-click="playVideo(sortVideo)")
+                            img(src="{{sortVideo.localInfo.cover}}")
+                        .caption
+                            .yzb-sortvideotitle-font {{sortVideo.title}}
+                            .yzb-sortvideotitle-font(ng-show="sortVideo.title==''") 这人好懒，连个标题都没有~~~
+                            div.yzb-sortvideo
+                                form(ng-submit="updateLVideo(sortVideo)")
+                                    button.btn.btn-primary(type="button",ng-click="playVideo(sortVideo)") Play
+                                    select.btn-default.btn(ng-model="selectQuery",style="width:40%;",ng-change="sQuery(selectQuery)")
+                                        option(ng-repeat="q in sQueryList",value="{{q._id}}") {{q.name}}
+                                    button.btn.btn-warning.pull-right(type="submit") Update
+                form.form-inline.pull-left
+                    ul.pagination.pagination-lg
+                        li.form-group
+                            label 共
+                            .form-control {{totalPage}}
+                            label 页
+                        li.form-group
+                            label 共
+                            .form-control {{count}}
+                            label 条
+                ul.pagination.pagination-lg#page(ng-show="totalPage>=1",total-page="totalPage",page-size="pageSize",current-page="currentPage",on-load-page="onLoadPage(page)",style="margin-left:15%;")
+                    li(ng-class="{true:'active'}[currentPage==0]")
+                        a(aria-label="Previous",href="",ng-click="currentPage==1;onLoadPage(0)")
+                            span(aria-hidden="true") begin
+                    li(ng-class="{true:'disabled',false:''}[currentPage==0]")
+                        a(aria-label="Previous",href="",ng-click="prev()")
+                            span(aria-hidden="true") &laquo;
+                    li(ng-class="{true:'active',false:''}[currentPage==0]")
+                        a(href="",ng-click="onLoadPage(0)") 1
+                    li(ng-show="middlePage>4&&totalPage>7")
+                        a(href="",ng-click="lastMiddlePage()") ...
+                    li(ng-repeat="page in pages",ng-show="totalPage>2",ng-class="{true:'active',false:''}[currentPage==page+1]")
+                        a(href="",ng-click="onLoadPage(page+1)") {{page+2}}
+                    li(ng-show="totalPage>7&&middlePage<totalPage-5")
+                        a(href="",ng-click="nextMiddlePage()") ...
+                    li(ng-class="{true:'active',false:''}[currentPage==totalPage-1]",ng-show="totalPage>1")
+                        a(href="javascript:void(0)",ng-click="onLoadPage(totalPage-1)") {{totalPage}}
+                    li(ng-class="{true:'disabled',false:''}[currentPage==totalPage-1]")
+                        a(aria-label="Previous",href="",ng-click="next()")
+                            span(aria-hidden="true") &raquo;
+                    li(ng-class="{true:'active'}[currentPage==totalPage-1]")
+                        a(aria-label="Previous",href="",ng-click="currentPage==totalPage-1;onLoadPage(totalPage-1)")
+                            span(aria-hidden="true") end
+                form.form-inline.pull-right(style="margin-right:10%;margin-top:1%;",ng-submit="onLoadPage(changeCurrent-1)")
+                    ul.pagination.pagination-lg
+                        li.form-group
+                            label 第
+                            input.form-control(type="text",required,number,style="width:50px;",ng-model="changeCurrent")
+                            label 页
+                        button.btn.btn-default(type="submit") GO
+
+

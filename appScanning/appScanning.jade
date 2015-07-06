@@ -1,0 +1,107 @@
+doctype html
+html(id="ng-app",ng-app="addScanningApp",lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1")
+        meta(http-equiv="X-UA-COMPATIBLE" content="Edge")
+        //base(href="/")
+        title app扫码
+    body(ng-controller="appScanningController")
+        .container-fluid.yzb-appScanning-top
+            .yzb-top-options
+                .yzb-top-icon
+                    img(src="img/appScanning-top-icon.png")
+                .yzb-top-button
+                    button.yzb-button.yzb-button--wayra.yzb-button--border-thin.yzb-button--round-s(value="",ng-click="SelectDevice('')") All
+                    button.yzb-button.yzb-button--wayra.yzb-button--border-thin.yzb-button--round-s(value="ios",ng-click="SelectDevice('IOS')") IOS
+                    button.yzb-button.yzb-button--wayra.yzb-button--border-thin.yzb-button--round-s(value="android",ng-click="SelectDevice('Android')") Android
+                    button.yzb-button.yzb-button--wayra.yzb-button--border-thin.yzb-button--round-s(value="other",ng-click="SelectDevice('Other')") Other
+            .yzb-top-count
+                #container
+                .yzb-count
+                    label(style="font-size:50px;") {{count}}
+                    label(style="font-size:20px;") 条
+            h1.yzb-top-title App扫码统计({{SelectMessage}})
+            .yzb-time-style
+                form.form-inline
+                    label.form-group
+                        input.form-control#datepickhidetime(type="text",style="display:none;",placeholder="hide")
+                        input.form-control#datepickmintime(type="text",placeholder="startTime",size="8px")
+                    label --
+                    label.form-group
+                        input.form-control#datepickmaxtime(type="text",placeholder="lastTime",size="8px")
+                .yzb-time-prompt Click on the input box,you can choose time query.
+
+        .container-fluid.yzb-appScanning-content
+            page-Directive
+                .list-group(style="width:95%;margin:0 auto;")
+                    .list-group-item.yzb-list-content.yzb-loadcontent-animation.col-md-12.col-lg-12.col-sm-12.col-xs-12(ng-repeat="appScan in appScans",style="margin-bottom:1%;")
+                        .media
+                            .media-left.col-md-3.col-lg-3.col-sm-3.col-xs-3
+                                span(style="font-weight:bold;color:#ffffff;") {{appScan.createAt | date:'yyyy-MM-dd HH:mm:ss'}}
+                                p.yzb-font-title(style="padding-top:2%;text-align:left;line-height:50px;font-size:16px;") {{appScan.agent_list.device}}
+                            .media-body(style="border-left:5px solid #ccc")
+                                .media-heading(style="padding-left:3%;")
+                                    //span {{appScan.userAgent}}
+                                div.col-md-9.col-lg-9.col-sm-9.col-xs-9(style="padding-left:3%;color:#fffacd;")
+                                    div
+                                        label.yzb-font-title --
+                                        label &nbsp;{{appScan.agent_list.ip}}&nbsp;&nbsp;
+                                        label.glyphicon.glyphicon-map-marker(aria-hidden="true") {{appScan.position.content.address}}
+                                    div
+                                        label.yzb-font-title --
+                                        label &nbsp;{{appScan.agent_list.os}}
+                                    div
+                                        label.yzb-font-title --
+                                        label &nbsp;{{appScan.agent_list.browser}}
+                    form.form-inline.pull-right(style="margin-left:2%;margin-top:1%;",ng-submit="onLoadPage(changeCurrent-1)")
+                        ul.pagination.pagination-lg
+                            li.form-group
+                                label 第
+                                input.form-control(type="text",required,number,style="width:50px;",ng-model="changeCurrent")
+                                label 页
+                            button.btn.btn-default(type="submit") GO
+                    form.form-inline.pull-left
+                        ul.pagination.pagination-lg
+                            li.form-group
+                                label 共
+                                .form-control {{totalPage}}
+                                label 页
+                            li.form-group
+                                .form-control {{count}}
+                                label 条
+                    ul.pull-right.pagination.pagination-lg#page(ng-show="totalPage>=1",total-page="totalPage",page-size="pageSize",current-page="currentPage",on-load-page="onLoadPage(page)")
+                        li(ng-class="{true:'active'}[currentPage==0]")
+                            a(aria-label="Previous",href="",ng-click="currentPage==1;onLoadPage(0)")
+                                span(aria-hidden="true") begin
+                        li(ng-class="{true:'disabled',false:''}[currentPage==0]")
+                            a(aria-label="Previous",href="",ng-click="prev()")
+                                span(aria-hidden="true") &laquo;
+                        li(ng-class="{true:'active',false:''}[currentPage==0]")
+                            a(href="",ng-click="onLoadPage(0)") 1
+                        li(ng-show="middlePage>4&&totalPage>7")
+                            a(href="",ng-click="lastMiddlePage()") ...
+                        li(ng-repeat="page in pages",ng-show="totalPage>2",ng-class="{true:'active',false:''}[currentPage==page+1]")
+                            a(href="",ng-click="onLoadPage(page+1)") {{page+2}}
+                        li(ng-show="totalPage>7&&middlePage<totalPage-5")
+                            a(href="",ng-click="nextMiddlePage()") ...
+                        li(ng-class="{true:'active',false:''}[currentPage==totalPage-1]",ng-show="totalPage>1")
+                            a(href="",ng-click="onLoadPage(totalPage-1)") {{totalPage}}
+                        li(ng-class="{true:'disabled',false:''}[currentPage==totalPage-1]")
+                            a(aria-label="Previous",href="",ng-click="next()")
+                                span(aria-hidden="true") &raquo;
+                        li(ng-class="{true:'active'}[currentPage==totalPage-1]")
+                            a(aria-label="Previous",href="",ng-click="currentPage==totalPage-1;onLoadPage(totalPage-1)")
+                                span(aria-hidden="true") end
+            .navbar.navbar-fixed-top.navbar-default.yzb-cebian-right
+                ul.nav.navbar-nav.yzb-cebian-right-ul
+                    li.pull-right
+                        button.btn.btn-default(type="button",ng-click="AppScanning()") AppScanning
+                    li.pull-right
+                        button.btn.btn-warning(type="button",ng-click="localVideo()") localVideo
+                    li.pull-right
+                        button.btn.btn-danger(type="button",ng-click="RecommendSeries()") Recommend
+                    li.pull-right
+                        button.btn.btn-primary(type="button",ng-click="superTag()") SuperTag
+                    .yzb-clear-float
+        load-App-Scanning-Script

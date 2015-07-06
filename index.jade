@@ -1,0 +1,29 @@
+doctype html
+html(id="ng-app",ng-app="indexApp",lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1")
+        meta(http-equiv="X-UA-COMPATIBLE" content="Edge")
+        title index
+        link(rel="styleSheet",href="css/bootstrap.min.css")
+        link(rel="styleSheet",href="css/index.css")
+        link(rel="styleSheet",href="css/pickdate/classic.css")
+        link(rel="styleSheet",href="css/pickdate/classic.date.css")
+        script(src="js/angular.min.js")
+        script(src="js/angular-router.js")
+        script(src="js/indexApp.js")
+        script(src="js/controller.js")
+        script(src="js/services.js")
+        script(src="js/jquery.min.js")
+        script(src="js/angular-resource.js")
+        script(src="js/directive.js")
+        script(src="js/allModal.js")
+        script(src="js/ui-bootstrap-tpls-0.13.0.min.js")
+        script(src="js/jquery.validator.min.js")
+        script(src="js/pickdate/picker.js")
+        script(src="js/pickdate/picker.date.js")
+        script(src="js/pickdate/legacy.js")
+        script(src='js/index.js')
+        script(src='js/velocity.min.js')
+    body
+        ng-view
